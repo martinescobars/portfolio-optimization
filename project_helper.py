@@ -18,8 +18,8 @@ def _generate_hover_text(x_text, y_text, z_values, x_label, y_label, z_label):
                   [len(x_label), len(y_label), len(z_label)]
 
     # Additional padding added to ticker and date to align
-    hover_text = x_label + ':  ' + padding_len[0] * ' ' + x_hover_text_values + '<br>' + \
-                 y_label + ':  ' + padding_len[1] * ' ' + y_hover_text_values.T + '<br>' + \
+    hover_text = x_label + ':  ' + padding_len[0] * ' ' + x_hover_text_values.astype(str) + '<br>' + \
+                 y_label + ':  ' + padding_len[1] * ' ' + y_hover_text_values.T.astype(str) + '<br>' + \
                  z_label + ': ' + padding_len[2] * ' ' + float_to_str(z_values)
 
     return hover_text
@@ -64,7 +64,7 @@ def large_dollar_volume_stocks(df, price_column, volume_column, top_percent):
     large_dollar_volume_stocks_symbols : List of str
         List of of large dollar volume stock symbols
     """
-    dollar_traded = df.groupby('ticker').apply(lambda row: sum(row[volume_column] * row[price_column]))
+    dollar_traded = df.groupby('Ticker').apply(lambda row: sum(row[volume_column] * row[price_column]))
 
     return dollar_traded.sort_values().tail(int(len(dollar_traded) * top_percent)).index.values.tolist()
 
